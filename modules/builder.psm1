@@ -11,7 +11,7 @@ function New-VMwareConnection{
     }
 }
 
-
+#creates a new blank server with no OS. Good for testing or setting up something that you need to install linux on
 function New-BlankServer{
     Param(
         [Parameter(Mandatory=$true)]
@@ -38,11 +38,16 @@ function New-BlankServer{
 #Then you either clone or convert that virtual machine for a template.
 function New-Template{
     Param(
-        
+        [Parameter(Mandatory=$true)]
+        [String] $templateName,
+        [String] $servername,
+        [String] $organization,
+        [String] $domain,
+        [String] $productKey
     )
     try{
-        New-OSCustomizationSpec -Name 'WindowsServer2012' -FullName 'TestName' -OrgName 'TestOrg' -OSType Windows -ChangeSid
-         -AdminPassword (Read-Host -AsSecureString) -Domain 'DOMAIN' -TimeZone 035 -DomainCredentials (Get-Credential) -ProductKey '1111-1111-1111-1111' -AutoLogonCount 1
+        New-OSCustomizationSpec -Name $templateName -FullName $servername -OrgName $organization -OSType Windows -ChangeSid
+         -AdminPassword (Read-Host -AsSecureString) -Domain $domain -TimeZone 035 -DomainCredentials (Get-Credential) -ProductKey $productKey -AutoLogonCount 1
     } catch {
         Write-Error -Message "Data was invalid, please try again. Also see comment at the top, be sure to have those finished."
     }
